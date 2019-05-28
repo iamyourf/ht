@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tarena.ht.mapper.ModuleMapper">
+	
+	<resultMap type="Module" id="moduleRM" autoMapping="true">
+		<id column="module_id" property="moduleId" />
+		<!-- 自关联 -->
+		<association property="parentModule" javaType="Module">
+			<id column="p_id" property="moduleId" />
+			<result column="p_name" property="name" />
+		</association>
+	</resultMap>
+	
+	<select id="findAll" resultMap="moduleRM">
+		select * from 
+		module_p m1 
+		left join 
+		(select module_id p_id, name p_name from module_p) m2 
+		on m1.parent_id = m2.p_id  
+	</select>
+	
+	<!-- 查询中间表的module信息 -->
+    <select id="findRoleModuleByRoleId" resultType="string">
+    	select * from role_module_p where role_id=#{roleId}
+    </select>
+</mapper>  

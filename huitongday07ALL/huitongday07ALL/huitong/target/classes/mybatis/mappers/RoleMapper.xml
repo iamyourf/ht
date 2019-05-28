@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tarena.ht.mapper.RoleMapper">
+	
+	<!-- 查询全部的角色信息 -->
+	<!-- <select id="findAll" resultType="Role">
+		select * from role_p 
+	</select> -->
+	
+	<delete id="deleteRole">
+		delete from role_p where role_id in 
+			<foreach collection="array" open="(" close=")" item="roleId" separator=",">
+				#{roleId}
+			</foreach>
+	</delete>
+	
+	<!-- 批量插入中间表的信息 -->
+	<insert id="saveRoleModule">
+		insert into role_module_p (module_id,role_id) 
+		values 
+			<foreach collection="moduleIds" item="moduleId" separator=","  >
+				(#{moduleId},#{roleId})
+			</foreach>
+		<!-- 
+		('4','123123213',) ,
+		('4','234234324')  -->
+	</insert>
+</mapper>
